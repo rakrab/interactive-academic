@@ -1,6 +1,6 @@
 import streamlit as st
 
-st.set_page_config(page_title="Home", layout="wide")
+st.set_page_config(page_title="PEN - Predictive Educational Notebook", layout="wide")
 avatars = {"user":":material/person:", "assistant":":material/robot_2:"}
 
 if "avatars" not in st.session_state:
