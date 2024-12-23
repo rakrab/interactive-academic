@@ -1,6 +1,6 @@
 import streamlit as st
 
-st.set_page_config(page_title="PEN - Predictive Educational Notebook", layout="wide")
+st.set_page_config(page_title="PEN", layout="wide")
 avatars = {"user":":material/person:", "assistant":":material/robot_2:"}
 
 if "avatars" not in st.session_state:
@@ -22,6 +22,9 @@ if "messages" not in st.session_state:
 
 if "autocomplete_output" not in st.session_state:
     st.session_state["autocomplete_output"] = ""
+
+if "reword_output" not in st.session_state:
+    st.session_state["reword_output"] = ""
 
 st.warning(st.session_state["openai_model"])
 st.warning(st.session_state["notepad"])
