@@ -1,8 +1,20 @@
 from openai import OpenAI
 import streamlit as st
+from libs.auth import lock_page
+
+avatars = st.session_state["avatars"]
+
+###############################################
+## Pre Authentication
+###############################################
+
+lock_page()
+
+###############################################
+## Post Authentication
+###############################################
 
 client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
-avatars = st.session_state["avatars"]
 
 # Display the chat history
 for message in st.session_state.get("messages", []):

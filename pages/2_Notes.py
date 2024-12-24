@@ -1,8 +1,17 @@
 from openai import OpenAI
 import streamlit as st
 import pyperclip
+from libs.auth import lock_page
 
-##### HELPER FUNCTIONS
+###############################################
+## Pre Authentication
+###############################################
+
+lock_page()
+
+###############################################
+## Helper Functions
+###############################################
 
 @st.dialog("Upload a file (.txt)", width="small")
 def uploadFileDialog():
@@ -85,8 +94,10 @@ def autocomplete():
     st.session_state["autocomplete_output"] = output
     # st.rerun()
 
-#####
 
+###############################################
+## Post Authentication
+###############################################
 
 client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 
