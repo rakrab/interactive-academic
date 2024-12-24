@@ -48,26 +48,24 @@ def reword(text, tone):
 
 @st.dialog("Reword", width="small")
 def rewordDialog():
-    input_text = st.text_area("Input")
+    st.markdown('##### Input')
+    input_text = st.text_area("Input", label_visibility="collapsed")
 
     tone = st.radio("Tone",
     [":material/group: Casual", ":material/work: Formal", ":material/school: Consultative"],
     horizontal=True,
     label_visibility="collapsed")
 
-    col1, col2 = st.columns([5,1])
-    with col1:
-        generate_button = st.button("Generate", icon=":material/autorenew:", use_container_width=True)
-    with col2:
-        copy_button = st.button("", icon=":material/content_copy:", use_container_width=True)
+    generate_button = st.button("Generate", icon=":material/autorenew:", use_container_width=True)
     
     if generate_button:
         reword(input_text, tone.split(":")[-1])
 
-    if copy_button:
-        pyperclip.copy(st.session_state["reword_output"])
+    # if copy_button:
+        # pyperclip.copy(st.session_state["reword_output"])
 
-    output_text = st.text_area("Output", disabled=True, value=st.session_state["reword_output"])
+    st.markdown("##### Output")
+    output_text = st.code(st.session_state["reword_output"], language="markdown")
 
 def insertAutocomplete():
     st.session_state["notepad"] += st.session_state["autocomplete_output"] + " "
@@ -119,7 +117,7 @@ with st.sidebar:
     with col2:
         autocomplete_insert_button = st.button("", icon=":material/chevron_right:", on_click=insertAutocomplete, disabled=(st.session_state["autocomplete_output"] == ""))
         
-    reword_button = st.button("Reword", icon=":material/history_edu:", on_click=rewordDialog, use_container_width=True)
+    reword_button = st.button("Reword", icon=":material/model_training:", on_click=rewordDialog, use_container_width=True)
 
     save_file_button = st.download_button("Save as file (.txt)", st.session_state["notepad"], icon=":material/save_as:", use_container_width=True)
     load_file_button = st.button("Load from file (.txt)", icon=":material/upload_file:", use_container_width=True)

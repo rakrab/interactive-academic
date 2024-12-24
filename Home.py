@@ -26,9 +26,11 @@ if "openai_model" not in st.session_state:
 if "notepad" not in st.session_state:
     st.session_state["notepad"] = ""
 
-# Initialize session state for the toggle if it doesn't exist yet
 if "new_model_state" not in st.session_state:
     st.session_state["new_model_state"] = False  # Default to the older model
+
+if "topics_state" not in st.session_state:
+    st.session_state["topics_state"] = []  # Default to no specialization
 
 if "messages" not in st.session_state:
     st.session_state["messages"] = []

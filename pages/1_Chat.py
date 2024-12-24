@@ -15,6 +15,7 @@ lock_page()
 ###############################################
 
 client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
+st.warning("Topics to specialize in are not fully implemented yet!", icon=":material/warning:")
 
 # Display the chat history
 for message in st.session_state.get("messages", []):
@@ -26,7 +27,7 @@ with st.sidebar:
     settings_expander = st.expander("Settings", icon=":material/settings:", expanded=True)
 
     with settings_expander:
-        new_model = st.toggle(":material/bolt: Use newer model", value=st.session_state["new_model_state"], help="Significantly slower, but more advanced reasoning")
+        new_model = st.toggle(":material/bolt: Use newer model", value=st.session_state["new_model_state"], help="Slower, but smarter. Useful for programming- and math-related tasks.")
 
         # Sync new_model to session_state
         if new_model != st.session_state["new_model_state"]:
@@ -36,6 +37,16 @@ with st.sidebar:
             st.session_state["openai_model"] = "o1-mini"
         else:
             st.session_state["openai_model"] = "gpt-4o"
+
+        topics = st.pills(":material/target: Topics to specialize in", 
+            options=[":material/history_edu: History", 
+            ":material/science: Science", ":material/calculate: Mathematics",
+            ":material/auto_stories: Literature", ":material/public: Geography", 
+            ":material/manufacturing: Technology"], 
+            selection_mode="multi", default=st.session_state["topics_state"])
+
+        if topics != st.session_state["topics_state"]:
+            st.session_state["topics_state"] = topics
 
 # Handle user input and generate assistant response
 if prompt := st.chat_input("Send a message!"):
