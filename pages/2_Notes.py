@@ -3,6 +3,9 @@ import streamlit as st
 import pyperclip
 from libs.auth import lock_page
 
+st.set_page_config(page_title="PEN", layout="wide")
+st.markdown('<link rel="stylesheet" href="libs/styles.css"', unsafe_allow_html=True)
+
 ###############################################
 ## Pre Authentication
 ###############################################
@@ -81,7 +84,7 @@ def autocomplete():
     try:
         response = client.chat.completions.create(
             model=st.session_state["openai_model"],
-            messages=[
+            messages= [{"role": m["role"], "content": m["content"]} for m in st.session_state.messages]+[
                 {"role": "user", "content": full_prompt}
             ]
         )

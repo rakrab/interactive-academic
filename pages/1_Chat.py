@@ -1,6 +1,10 @@
 from openai import OpenAI
 import streamlit as st
 from libs.auth import lock_page
+from libs.process import process_topics
+
+st.set_page_config(page_title="PEN", layout="wide")
+st.markdown('<link rel="stylesheet" href="libs/styles.css"', unsafe_allow_html=True)
 
 avatars = st.session_state["avatars"]
 
