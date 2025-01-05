@@ -94,7 +94,33 @@ with what_are_the_advantages:
 
 st.divider()
 
-changelog = st.expander("Changelog", icon=":material/published_with_changes:", expanded=False)
+# changelog = st.expander("Changelog", icon=":material/published_with_changes:", expanded=False)
 
-with changelog:
-    st.markdown("Changelog")
+st.markdown("#### Changelog :material/published_with_changes:")
+st.caption("Changes marked with :material/warning: are experimental")
+st.caption("Changes marked with :material/bug_report: are buggy")
+
+irel02 = st.expander("irel-02", icon=":material/radio_button_checked:")
+with irel02:
+    st.markdown("""
+        - **Home**
+            - Improved authentication system
+            - Added access tiers
+        - **Notepad**
+            - Added word and character counts :material/bug_report:
+    """)
+
+preview01 = st.expander("preview-01", icon=":material/circle:")
+with preview01:
+    st.markdown("""
+    - **Home**
+        - Added descriptions
+        - Added authentication system
+    - **Notepad**
+        - Added autocomplete
+        - Added reword
+        - Added saving and loading as .txt
+    - **Chat**
+        - Added toggle for models
+        - Added topics interface and basic integration
+    """)

@@ -102,10 +102,19 @@ def autocomplete():
 
 client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 
+st.warning("The notepad is currently NOT PERSISTENT! If you leave the page it will be CLEARED!", icon=":material/warning:")
+
 notepad = st.text_area("Notepad", 
-    height=420,
-    value=st.session_state["notepad"],
+    height=380,
+    key="notepad",
+    # value=st.session_state["notepad"],
+    # on_change=syncNotepad,
     label_visibility="collapsed")
+
+wordCol, charCol = st.columns([1,1]);
+
+with wordCol: st.caption(str(len(st.session_state["notepad"].split())) + " Words")
+with charCol: st.caption(str(len(st.session_state["notepad"])) + " Characters")
 
 autocomplete_output_notif = st.empty()
 if st.session_state["autocomplete_output"] != "":
@@ -127,6 +136,3 @@ with st.sidebar:
 
     if load_file_button:
         uploadFileDialog()
-
-if notepad != st.session_state["notepad"]:
-    st.session_state["notepad"] = notepad

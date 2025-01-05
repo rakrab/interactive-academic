@@ -1,13 +1,14 @@
 import streamlit as st
+import json
 import bcrypt
 
-usernames = st.secrets.AUTH.USERNAMES
-access_tokens = st.secrets.AUTH.ACCESS_TOKENS
+accounts_json = st.secrets.AUTH.ACCOUNTS
+accounts = json.loads(accounts_json)
 
 def lock_page():
     if st.session_state["authenticated"] == False:
-
-        st.error("You are not authenticated", icon=":material/lock:")
+        err = st.empty()
+        err.error("You are not authenticated", icon=":material/lock:")
         username = st.text_input("Username", label_visibility="collapsed", placeholder="Username")
         col1, col2 = st.columns([13,1])
         with col1:
@@ -15,11 +16,16 @@ def lock_page():
         with col2:
             login_button = st.button("", icon=":material/login:", use_container_width=True)
 
-        if login_button and username in usernames:
-            idx = usernames.index(username)
-            if bcrypt.checkpw(access_token.encode('utf-8'), access_tokens[idx].encode('utf-8')):
-                st.session_state["authenticated"] = True
-                st.rerun()
+        if login_button:
+            if username in accounts:
+                user = accounts[username];
+                if bcrypt.checkpw(access_token.encode('utf-8'), user['access_token'].encode('utf-8')):
+                    st.session_state["authenticated"] = True
+                    st.rerun()
+                else:
+                    err.error("Invalid Username or Access Token", icon=":material/cancel:")
+            else:
+                err.error("Invalid Username or Access Token", icon=":material/cancel:")
 
         st.stop()
 
