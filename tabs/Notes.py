@@ -3,14 +3,7 @@ import streamlit as st
 import pyperclip
 from libs.auth import lock_page
 
-st.set_page_config(page_title="PEN", layout="wide")
-st.markdown('<link rel="stylesheet" href="libs/styles.css"', unsafe_allow_html=True)
-
-###############################################
-## Pre Authentication
-###############################################
-
-lock_page()
+client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 
 ###############################################
 ## Helper Functions
@@ -52,7 +45,7 @@ def reword(text, tone):
 @st.dialog("Reword", width="small")
 def rewordDialog():
     st.markdown('##### Input')
-    input_text = st.text_area("Input", label_visibility="collapsed")
+    input_text = st.text_area("Input", label_visibility="collapsed", value=st.session_state["notepad"])
 
     tone = st.radio("Tone",
     [":material/group: Casual", ":material/work: Formal", ":material/school: Consultative"],
@@ -64,14 +57,11 @@ def rewordDialog():
     if generate_button:
         reword(input_text, tone.split(":")[-1])
 
-    # if copy_button:
-        # pyperclip.copy(st.session_state["reword_output"])
-
     st.markdown("##### Output")
     output_text = st.code(st.session_state["reword_output"], language="markdown")
 
 def insertAutocomplete():
-    st.session_state["notepad"] += st.session_state["autocomplete_output"] + " "
+    st.session_state["notepad"] += " " + st.session_state["autocomplete_output"] + " "
     st.session_state["autocomplete_output"] = ""
 
 def autocomplete():
@@ -100,39 +90,36 @@ def autocomplete():
 ## Post Authentication
 ###############################################
 
-client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
-
-st.warning("The notepad is currently NOT PERSISTENT! If you leave the page it will be CLEARED!", icon=":material/warning:")
-
-notepad = st.text_area("Notepad", 
-    height=380,
-    key="notepad",
-    # value=st.session_state["notepad"],
-    # on_change=syncNotepad,
-    label_visibility="collapsed")
-
-wordCol, charCol = st.columns([1,1]);
-
-with wordCol: st.caption(str(len(st.session_state["notepad"].split())) + " Words")
-with charCol: st.caption(str(len(st.session_state["notepad"])) + " Characters")
-
-autocomplete_output_notif = st.empty()
-if st.session_state["autocomplete_output"] != "":
-    autocomplete_output_notif.info(st.session_state["autocomplete_output"], icon=":material/hotel_class:")
-
-with st.sidebar:
-    col1, col2 = st.columns([5,1])
-
-    with col1:
-        autocomplete_button = st.button("Autocomplete", icon=":material/hotel_class:", on_click=autocomplete, use_container_width=True)
+def notes_tab():
+    autocomplete_output_notif = st.empty() 
     
-    with col2:
-        autocomplete_insert_button = st.button("", icon=":material/chevron_right:", on_click=insertAutocomplete, disabled=(st.session_state["autocomplete_output"] == ""))
+    settingsSpace, notepadSpace = st.columns([2,5])
+    
+    with notepadSpace:
+        notepad = st.text_area("Notepad", 
+            height=405,
+            key="notepad",
+            label_visibility="collapsed")
+
+        if st.session_state["autocomplete_output"] != "":
+            autocomplete_output_notif.info(st.session_state["autocomplete_output"], icon=":material/hotel_class:")
+
+    with settingsSpace:
+        col1, col2 = st.columns([5,1])
+
+        with col1:
+            autocomplete_button = st.button("Autocomplete", icon=":material/hotel_class:", on_click=autocomplete, use_container_width=True)
         
-    reword_button = st.button("Reword", icon=":material/model_training:", on_click=rewordDialog, use_container_width=True)
+        with col2:
+            autocomplete_insert_button = st.button("", icon=":material/chevron_right:", on_click=insertAutocomplete, disabled=(st.session_state["autocomplete_output"] == ""))
+            
+        reword_button = st.button("Reword", icon=":material/model_training:", on_click=rewordDialog, use_container_width=True)
 
-    save_file_button = st.download_button("Save as file (.txt)", st.session_state["notepad"], icon=":material/save_as:", use_container_width=True)
-    load_file_button = st.button("Load from file (.txt)", icon=":material/upload_file:", use_container_width=True)
+        save_file_button = st.download_button("Save as file (.txt)", st.session_state["notepad"], icon=":material/save_as:", use_container_width=True)
+        load_file_button = st.button("Load from file (.txt)", icon=":material/upload_file:", use_container_width=True, disabled=True)
 
-    if load_file_button:
-        uploadFileDialog()
+        st.caption(str(len(st.session_state["notepad"])) + " Characters | "
+                + str(len(st.session_state["notepad"].split())) + " Words")
+
+        if load_file_button:
+            uploadFileDialog()
