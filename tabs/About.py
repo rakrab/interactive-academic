@@ -79,7 +79,7 @@ def about_tab():
                 - Added word and character counts
         """)
 
-    with st.expander("preview-01", icon=":material/unradio_button_checked:"):
+    with st.expander("preview-01", icon=":material/radio_button_unchecked:"):
         st.markdown("""
         - **General**
             - Added Home
