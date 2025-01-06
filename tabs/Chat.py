@@ -2,7 +2,6 @@ from openai import OpenAI
 import streamlit as st
 from libs.auth import lock_page
 from libs.process import process_topics
-from streamlit_extras.bottom_container import bottom 
 
 client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 avatars =  {"user":":material/person:", "assistant":":material/robot_2:"}
