@@ -55,8 +55,15 @@ def about_tab():
     st.caption("Changes marked with :material/warning: are experimental")
     st.caption("Changes marked with :material/bug_report: are buggy")
 
-    irel02 = st.expander("irel-02", icon=":material/radio_button_checked:")
-    with irel02:
+    with st.expander("irel-03", icon=":material/radio_button_checked:"):
+        st.markdown("""
+        - **General**
+            - Improved scaling :material/warning:
+        - **Chat**
+            - Added complexity
+        """)
+
+    with st.expander("irel-02", icon=":material/radio_button_unchecked:"):
         st.markdown("""
             - **General**
                 - Improved authentication system
@@ -72,8 +79,7 @@ def about_tab():
                 - Added word and character counts
         """)
 
-    preview01 = st.expander("preview-01", icon=":material/circle:")
-    with preview01:
+    with st.expander("preview-01", icon=":material/unradio_button_checked:"):
         st.markdown("""
         - **General**
             - Added Home

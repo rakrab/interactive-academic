@@ -3,6 +3,7 @@ from libs.auth import lock_page
 from tabs.Notes import notes_tab
 from tabs.Chat import chat_tab
 from tabs.About import about_tab
+from streamlit_js_eval import streamlit_js_eval
 
 st.set_page_config(page_title="PEN", layout="wide")
 
@@ -10,6 +11,13 @@ avatars = {"user":":material/person:", "assistant":":material/robot_2:"}
 
 if "authenticated" not in st.session_state:
     st.session_state["authenticated"] = False
+
+
+screen_width = streamlit_js_eval(js_expressions='window.outerWidth', want_output=True, key='SCRWM') 
+screen_height = streamlit_js_eval(js_expressions='window.outerHeight', want_output=True, key='SCRHM')
+
+st.session_state["screen_width"] = screen_width
+st.session_state["screen_height"] = screen_height
 
 ###############################################
 ## Pre Authentication
@@ -22,7 +30,7 @@ st.markdown("""
 
         /* Remove blank space at top and bottom */ 
         .block-container {
-            padding-top: 2rem;
+            padding-top: 0rem;
             padding-bottom: 1rem;
         }
         
@@ -70,6 +78,12 @@ if "autocomplete_output" not in st.session_state:
 
 if "reword_output" not in st.session_state:
     st.session_state["reword_output"] = ""
+
+if "topics" not in st.session_state:
+    st.session_state["topics"] = []
+
+if "complexity" not in st.session_state:
+    st.session_state["complexity"] = ":material/category: Simple"
 
 ###############################################
 ## Post Authentication - Interface

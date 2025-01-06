@@ -1,6 +1,5 @@
 from openai import OpenAI
 import streamlit as st
-import pyperclip
 from libs.auth import lock_page
 
 client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
@@ -91,13 +90,15 @@ def autocomplete():
 ###############################################
 
 def notes_tab():
+    screen_width = st.session_state["screen_width"]
+    screen_height = st.session_state["screen_height"]
+    
     autocomplete_output_notif = st.empty() 
     
     settingsSpace, notepadSpace = st.columns([2,5])
-    
     with notepadSpace:
         notepad = st.text_area("Notepad", 
-            height=405,
+            height=int(screen_height*0.8),
             key="notepad",
             label_visibility="collapsed")
 
@@ -111,7 +112,7 @@ def notes_tab():
             autocomplete_button = st.button("Autocomplete", icon=":material/hotel_class:", on_click=autocomplete, use_container_width=True)
         
         with col2:
-            autocomplete_insert_button = st.button("", icon=":material/chevron_right:", on_click=insertAutocomplete, disabled=(st.session_state["autocomplete_output"] == ""))
+            autocomplete_insert_button = st.button("", icon=":material/chevron_right:", on_click=insertAutocomplete, use_container_width=True, disabled=(st.session_state["autocomplete_output"] == ""))
             
         reword_button = st.button("Reword", icon=":material/model_training:", on_click=rewordDialog, use_container_width=True)
 
