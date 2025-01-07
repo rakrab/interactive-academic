@@ -49,7 +49,7 @@ def chat_tab():
                     f"Please {complexities[st.session_state['complexity']]}\n\n"
                     f"Your prompt is as follows: \n\n{prompt}"
                     )
-                st.warning(full_prompt)
+                # st.warning(full_prompt)
                 full_message = [
                     {"role": "user", "content": full_prompt}
                 ]
